@@ -1,0 +1,31 @@
+name: E2E
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Install Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+      - name: Install packages
+        run: npm ci
+      - name: Install browsers
+        run: npm exec playwright install --with-deps
+      - name: Run tests
+        run: npx playwright test
+      - name: Add allure report
+        run: npm run allureFile
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
