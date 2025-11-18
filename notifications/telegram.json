@@ -1,0 +1,19 @@
+{
+  "base": {
+    "logo": "",
+    "project": "QA GURU Project",
+    "environment": "some env",
+    "comment": "some comment",
+    "reportLink": "",
+    "language": "en",
+    "allureFolder": "allure-report",
+    "enableChart": true,
+    "enableSuitesPublishing": false,
+    "customData": {}
+  },
+  "telegram": {
+    "token": "8070597170:AAGdxOhQSkjn4SgX9chzhqrVkJ2P7dHWWGg",
+    "chat": "-5093971938",
+    "replyTo": ""
+  }
+}
