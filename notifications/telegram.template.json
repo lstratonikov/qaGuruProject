@@ -2,8 +2,8 @@
   "base": {
     "logo": "",
     "project": "QA GURU Project",
-    "environment": "some env",
-    "comment": "some comment",
+    "environment": "stg",
+    "comment": "Test result",
     "reportLink": "",
     "language": "en",
     "allureFolder": "allure-report",
@@ -12,8 +12,8 @@
     "customData": {}
   },
   "telegram": {
-    "token": "${TELEGRAM_BOT_TOKEN}",
-    "chat": "-5093971938",
+    "token": "%%TELEGRAM_BOT_TOKEN%%",
+    "chat": "%%TELEGRAM_CHAT_ID%%",
     "replyTo": ""
   }
 }

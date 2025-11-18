@@ -35,14 +35,11 @@ jobs:
           path: allure-report/
           retention-days: 30
 
-      - name: Create config with secret
+      - name: Generate telegram.json
         run: |
-          echo '{
-            "telegram": {
-              "token": "${{ secrets.TELEGRAM_BOT_TOKEN }}",
-              "chat": "-5093971938"
-            }
-          }' > telegram.json
+          sed -e "s/%%TELEGRAM_BOT_TOKEN%%/${{ secrets.TELEGRAM_BOT_TOKEN }}/g" \
+          -e "s/%%TELEGRAM_CHAT_ID%%/${{ secrets.TELEGRAM_CHAT_ID }}/g" \
+          notifications/telegram.template.json > notifications/telegram.json
 
       - name: Send notification in telegram
         run: java "-DconfigFile=notifications/telegram.json" -jar notifications/allure-notifications-4.11.0.jar
