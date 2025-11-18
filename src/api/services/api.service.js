@@ -1,4 +1,4 @@
-import { ChallengerService, ChallengesService, HeartbeatService, TodosService, SecretService } from "./index";
+import { ChallengerService, ChallengesService, HeartbeatService, TodosService, SecretService, AuthService } from "./index";
 
 export class Api {
     constructor(request) {
@@ -8,5 +8,6 @@ export class Api {
         this.todos = new TodosService(request);
         this.heartbeat = new HeartbeatService(request);
         this.secret = new SecretService(request);
+        this.auth = new AuthService(request);
     }
 }

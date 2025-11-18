@@ -4,10 +4,6 @@ import { ArticleBuilder } from '../../src/ui/helpers/builders/article.builder';
 import { ProfileBuilder } from '../../src/ui/helpers/builders/profile.builder';
 import { App } from '../../src/ui/pages/app.page';
 
-test.beforeEach(({}, testInfo) => {
-    testInfo.annotations.push({ type: 'tag', description: '@ui' });
-});
-
 test('1. Пользователь может зарегистрироваться', async ({page}) => {
 
     //Генерируем юзера для регистрации

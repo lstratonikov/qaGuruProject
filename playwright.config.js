@@ -4,7 +4,6 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
 
   testDir: './tests',
-  globalSetup: require.resolve('./global-setup'),  
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
@@ -28,7 +27,6 @@ export default defineConfig({
       testMatch: 'tests/ui/**/*.spec.js',
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'https://realworld.qa.guru/',
       },
     },
   ],

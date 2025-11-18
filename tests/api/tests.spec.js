@@ -1,10 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, request } from '@playwright/test';
 import { Api } from '../../src/api/services/api.service';
 import { TodoBuilder } from '../../src/api/helpers/builders/todo.builder';
 import { ChallengerBuilder } from '../../src/api/helpers/builders/challenger.builder';
 
-test.beforeEach(({}, testInfo) => {
-    testInfo.annotations.push({ type: 'tag', description: '@api' });
+test.beforeAll(async ({ request }) => {
+    let api = new Api(request);
+    await api.auth.getToken();
 });
 
 test.describe('First Real Challenge', () => {

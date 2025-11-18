@@ -1,4 +1,4 @@
-name: E2E
+name: QA Github CI
 on:
   push:
   pull_request:
