@@ -1,3 +1,5 @@
+import { test } from '@playwright/test';
+
 export class RegisterPage {
 
     constructor(page) {
@@ -9,10 +11,12 @@ export class RegisterPage {
     }
 
     async signUp(randomUser) {
-        const {username, email, password} = randomUser;
-		await this.usernameField.fill(username);
-		await this.emailField.fill(email);
-		await this.passwordField.fill(password);
-		await this.confirmSignUpButton.click(); 
+        return test.step('Регистрируем нового пользователя', async ( step ) => {
+            const {username, email, password} = randomUser;
+		    await this.usernameField.fill(username);
+		    await this.emailField.fill(email);
+		    await this.passwordField.fill(password);
+		    await this.confirmSignUpButton.click();
+        });
     }
 } 

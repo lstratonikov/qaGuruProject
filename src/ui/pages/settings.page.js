@@ -1,3 +1,4 @@
+import { test } from '@playwright/test';
 export class SettingsPage {
 
     constructor(page) {
@@ -10,13 +11,15 @@ export class SettingsPage {
         this.confirmUpdateSettingsButton = page.getByRole('button', { name: 'Update Settings' });
     }
 
-   async editProfile(randomProfile) {
-        const {avatar, username, bio, email, password} = randomProfile;
-		await this.avatarField.fill(avatar);
-        await this.usernameField.fill(username);
-		await this.bioField.fill(bio);
-        await this.emailField.fill(email);
-		await this.passwordField.fill(password);
-		await this.confirmUpdateSettingsButton.click(); 
+    async editProfile(randomProfile) {
+        return test.step('Редактируем данные пользователя', async ( step ) => {
+            const {avatar, username, bio, email, password} = randomProfile;
+		    await this.avatarField.fill(avatar);
+            await this.usernameField.fill(username);
+		    await this.bioField.fill(bio);
+            await this.emailField.fill(email);
+		    await this.passwordField.fill(password);
+		    await this.confirmUpdateSettingsButton.click();
+        });
     }
 }

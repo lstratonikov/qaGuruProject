@@ -2,7 +2,7 @@ import { defineConfig } from "allure";
 
 export default defineConfig({
   name: "Allure Report",
-  output: "./out/allure-report",
+  output: "./allure-report",
   plugins: {
     awesome: {
       options: {

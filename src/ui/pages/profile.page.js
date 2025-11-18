@@ -1,3 +1,5 @@
+import { test } from '@playwright/test';
+
 export class ProfilePage {
 
     constructor(page) {
@@ -9,16 +11,22 @@ export class ProfilePage {
     }
 
     async openArticle(articleTitle) {
-        const articleLink = this.page.getByText(articleTitle);
-        await articleLink.click()
+        return test.step('Открываем статью', async ( step ) => {
+            const articleLink = this.page.getByText(articleTitle);
+            await articleLink.click()
+        });
     }
 
     async addArticleToFavorite(articleTitle) {
-        const addToFavoriteButton = this.page.locator(".article-preview").filter({ hasText: articleTitle }).locator(".btn.btn-sm.btn-outline-primary.pull-xs-right");
-        await addToFavoriteButton.click();
+        return test.step('Добавляем статью в избранное', async ( step ) => {
+            const addToFavoriteButton = this.page.locator(".article-preview").filter({ hasText: articleTitle }).locator(".btn.btn-sm.btn-outline-primary.pull-xs-right");
+            await addToFavoriteButton.click();
+        });
     }
 
     async goToFavoritedArticles() {
-        await this.favoritedArticlesItem.click();
+        return test.step('Открываем список избранных статей', async ( step ) => {
+            await this.favoritedArticlesItem.click();
+        });
     }
 }

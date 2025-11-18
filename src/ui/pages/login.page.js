@@ -1,3 +1,5 @@
+import { test } from '@playwright/test';
+
 export class LoginPage {
 
     constructor(page) {
@@ -8,9 +10,11 @@ export class LoginPage {
     }
 
     async signIn(authorisedUser) {
-        const { email, password } = authorisedUser;
-		await this.emailField.fill(email);
-		await this.passwordField.fill(password);
-		await this.confirmLoginButton.click(); 
+        return test.step('Логинимся под существующим пользователем', async ( step ) => {
+            const { email, password } = authorisedUser;
+		    await this.emailField.fill(email);
+		    await this.passwordField.fill(password);
+		    await this.confirmLoginButton.click();
+        });
     }
 } 

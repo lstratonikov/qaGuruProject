@@ -11,7 +11,6 @@ export class AuthService {
             const response = await this.request.post('/challenger', {});
             const headers = response.headers();
             const authToken = headers['x-challenger'];
-            console.log(authToken);
             process.env['AUTH_TOKEN'] = authToken;
             return authToken;
         });

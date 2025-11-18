@@ -1,3 +1,4 @@
+import { test } from '@playwright/test';
 export class MainPage {
 
     constructor(page) {
@@ -13,34 +14,48 @@ export class MainPage {
     }
 
     async open() {
-        await this.page.goto(this.homePage);
+        return test.step('Переходим на главную страницу', async ( step ) => {
+            await this.page.goto(this.homePage);
+        });
     }
 
     async login() {
-        await this.loginLink.click();
+        return test.step('Переходим на страницу залогина', async ( step ) => {
+            await this.loginLink.click();
+        });
     }
 
     async register() {
-        await this.registerLink.click();
+        return test.step('Переходим на страницу регистрации', async ( step ) => {
+            await this.registerLink.click();
+        });
     }
 
     async newArticle() {
-        await this.newArticleLink.click();
+        return test.step('Переходим к созданию новой статьи', async ( step ) => {
+            await this.newArticleLink.click();
+        });
     }
 
     async goToProfile() {
-        await this.dropdownProfileMenu.click();
-        await this.profileOption.click();
+        return test.step('Переходим на страницу профиля', async ( step ) => {
+            await this.dropdownProfileMenu.click();
+            await this.profileOption.click();
+        });
     }
 
     async goToSettings() {
-        await this.dropdownProfileMenu.click();
-        await this.settingsOption.click();
+        return test.step('Переходим на страницу настроек', async ( step ) => {
+            await this.dropdownProfileMenu.click();
+            await this.settingsOption.click();
+        });
     }
 
     async logout() {
-        await this.dropdownProfileMenu.click();
-        await this.logoutOption.click();
+        return test.step('Выходим из текущего профиля', async ( step ) => {
+            await this.dropdownProfileMenu.click();
+            await this.logoutOption.click();
+        });
     }
 
 }

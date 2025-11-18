@@ -1,3 +1,5 @@
+import { test } from '@playwright/test';
+
 export class ArticlePage {
 
     constructor(page) {
@@ -12,13 +14,17 @@ export class ArticlePage {
     }
 
     async editArticle() {
-        await this.editArticleButton.click();
+        return test.step('Переходим на страницу редактирования статьи', async ( step ) => {
+            await this.editArticleButton.click();
+        });
     }
 
     async deleteArticle() {
-        this.page.on('dialog', async dialog => {
-            await dialog.accept();
+        return test.step('Удаляем статью', async ( step ) => {
+            this.page.on('dialog', async dialog => {
+             await dialog.accept();
+            });
+            await this.deleteArticleButton.click();
         });
-        await this.deleteArticleButton.click();
     }
 }
