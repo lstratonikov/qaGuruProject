@@ -27,7 +27,7 @@ jobs:
         run: npx playwright test
 
       - name: Add allure report
-        run: npm run allureFile
+        run: npx allure-commandline generate ./allure-results -o ./allure-report --clean
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
