@@ -12,7 +12,7 @@
     "customData": {}
   },
   "telegram": {
-    "token": "8070597170:AAGdxOhQSkjn4SgX9chzhqrVkJ2P7dHWWGg",
+    "token": "${TELEGRAM_BOT_TOKEN}",
     "chat": "-5093971938",
     "replyTo": ""
   }
