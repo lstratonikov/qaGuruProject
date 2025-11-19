@@ -2,49 +2,89 @@ name: QA Github CI
 on:
   push:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
+
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 20.x
 
-      - name: Install packages
+      - name: Install dependencies
         run: npm ci
 
-      - name: Install browsers
-        run: npm exec playwright install --with-deps
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
 
       - name: Create .env
         run: |
-          echo "BASE_URL_API=${{ vars.BASE_URL_API }}" >> .env
-          echo "BASE_URL_UI=${{ vars.BASE_URL_UI }}" >> .env
+          echo "BASE_URL_API=${{ vars.BASE_URL_API }}
+          BASE_URL_UI=${{ vars.BASE_URL_UI }}" >> .env
 
       - name: Run tests
         run: npx playwright test
 
-      - name: Add allure report
-        run: npx allure-commandline generate ./allure-results -o ./allure-report --clean
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: allure-report
-          path: allure-report/
-          retention-days: 30
+          name: allure-results
+          path: allure-results
+          retention-days: 3
 
-      - name: Generate telegram.json
+      - name: Generate & publish Allure report
+        if: always()
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+          keep_reports: 10
+
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-history
+          publish_branch: gh-pages
+          keep_reports: 10
+
+      - name: Download allurectl
         run: |
-          sed -e "s/%%TELEGRAM_BOT_TOKEN%%/${{ secrets.TELEGRAM_BOT_TOKEN }}/g" \
-          -e "s/%%TELEGRAM_CHAT_ID%%/${{ secrets.TELEGRAM_CHAT_ID }}/g" \
-          notifications/telegram.template.json > notifications/telegram.json
+          curl -Lo allurectl https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64
+          chmod +x allurectl
+          sudo mv allurectl /usr/local/bin/
 
-      - name: Send notification in telegram
-        run: java "-DconfigFile=notifications/telegram.json" -jar notifications/allure-notifications-4.11.0.jar
+      - name: Upload results to Allure TestOps
+        if: always()
+        env:
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_ENDPOINT: "https://allure.autotests.cloud/"
+          ALLURE_PROJECT_ID: "5010"
+        run: |
+          allurectl upload \
+            --project-id $ALLURE_PROJECT_ID \
+            --endpoint $ALLURE_ENDPOINT \
+            --token $ALLURE_TOKEN \
+            ./allure-results
+
+      - name: Set report URL
+        run: echo "REPORT_URL=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_ENV
+
+      - name: Prepare Telegram config
+        run: |
+          cp notifications/telegram.template.json notifications/telegram.json
+          sed -i "s|\"reportLink\":.*|\"reportLink\": \"$REPORT_URL\",|" notifications/telegram.json
+          sed -i "s|%%TELEGRAM_BOT_TOKEN%%|${{ secrets.TELEGRAM_BOT_TOKEN }}|" notifications/telegram.json
+          sed -i "s|%%TELEGRAM_CHAT_ID%%|${{ secrets.TELEGRAM_CHAT_ID }}|" notifications/telegram.json
+
+      - name: Send Telegram notification
+        run: java -DconfigFile=notifications/telegram.json -jar notifications/allure-notifications-4.11.0.jar
