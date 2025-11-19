@@ -1,7 +1,5 @@
 import { test, expect} from '@playwright/test';
-import { UserBuilder } from '../../src/ui/helpers/builders/user.builder';
-import { ArticleBuilder } from '../../src/ui/helpers/builders/article.builder';
-import { ProfileBuilder } from '../../src/ui/helpers/builders/profile.builder';
+import { ArticleBuilder, ProfileBuilder, UserBuilder } from '../../src/ui/helpers/builders/index';
 import { App } from '../../src/ui/pages/app.page';
 
 test('1. Пользователь может зарегистрироваться', async ({page}) => {

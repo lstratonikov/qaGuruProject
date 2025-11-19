@@ -1,13 +1,14 @@
 import { test } from '@playwright/test';
+
 export class MainPage {
 
     constructor(page) {
         this.page = page
-        this.homePage = 'https://realworld.qa.guru/';
+        this.homePage = '/';
         this.loginLink = page.locator("[href = '#/login']");
         this.registerLink = page.locator("[href = '#/register']");
         this.newArticleLink = page.locator("[href = '#/editor']");
-        this.dropdownProfileMenu = page.locator(".nav-link.dropdown-toggle.cursor-pointer"); //Как кликнуть четко по указателю? Псевдоэлемент ::after
+        this.dropdownProfileMenu = page.locator(".nav-link.dropdown-toggle.cursor-pointer");
         this.profileOption = page.getByText('Profile');
         this.settingsOption = page.getByText('Settings');
         this.logoutOption = page.getByText('Logout');
@@ -57,5 +58,4 @@ export class MainPage {
             await this.logoutOption.click();
         });
     }
-
 }

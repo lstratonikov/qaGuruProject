@@ -2,9 +2,9 @@
   "base": {
     "logo": "",
     "project": "QA GURU Project",
-    "environment": "some env",
-    "comment": "some comment",
-    "reportLink": "",
+    "environment": "stg",
+    "comment": "Test result",
+    "reportLink": "https://jenkins.autotests.cloud/job/qaGuruProject/",
     "language": "en",
     "allureFolder": "allure-report",
     "enableChart": true,
@@ -12,8 +12,8 @@
     "customData": {}
   },
   "telegram": {
-    "token": "8070597170:AAGdxOhQSkjn4SgX9chzhqrVkJ2P7dHWWGg",
-    "chat": "-5093971938",
+    "token": "%%TELEGRAM_BOT_TOKEN%%",
+    "chat": "%%TELEGRAM_CHAT_ID%%",
     "replyTo": ""
   }
 }

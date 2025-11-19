@@ -1,5 +1,8 @@
 //@ts-check
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 export default defineConfig({
 
@@ -22,7 +25,7 @@ export default defineConfig({
       name: 'API_tests',
       testMatch: 'tests/api/**/*.spec.js',
       use: {
-        baseURL: 'https://apichallenges.herokuapp.com',
+        baseURL: process.env.BASE_URL_API
       }
     },
     {
@@ -30,6 +33,7 @@ export default defineConfig({
       testMatch: 'tests/ui/**/*.spec.js',
       use: {
         ...devices['Desktop Chrome'],
+        baseURL: process.env.BASE_URL_UI,
       },
     },
   ],
