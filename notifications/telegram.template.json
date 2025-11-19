@@ -4,7 +4,7 @@
     "project": "QA GURU Project",
     "environment": "stg",
     "comment": "Test result",
-    "reportLink": "https://jenkins.autotests.cloud/job/qaGuruProject/allure/",
+    "reportLink": "https://jenkins.autotests.cloud/job/qaGuruProject/",
     "language": "en",
     "allureFolder": "allure-report",
     "enableChart": true,
