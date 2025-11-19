@@ -2,57 +2,46 @@ name: QA Github CI
 on:
   push:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
+
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 20.x
 
-      - name: Install packages
+      - name: Install dependencies
         run: npm ci
 
-      - name: Install browsers
-        run: npm exec playwright install --with-deps
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
 
       - name: Create .env
         run: |
-          echo "BASE_URL_API=${{ vars.BASE_URL_API }}" >> .env
-          echo "BASE_URL_UI=${{ vars.BASE_URL_UI }}" >> .env
+          echo "BASE_URL_API=${{ vars.BASE_URL_API }}
+          BASE_URL_UI=${{ vars.BASE_URL_UI }}" >> .env
 
       - name: Run tests
         run: npx playwright test
 
-      - name: Add allure report
-        run: npx allure-commandline generate ./allure-results -o ./allure-report --clean
-      - uses: actions/upload-artifact@v4
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
         if: always()
-        continue-on-error: true
         with:
           name: allure-results
           path: allure-results
-          retention-days: 10
+          retention-days: 3
 
-      - name: Fetch reports history
-        uses: actions/checkout@v4
+      - name: Generate & publish Allure report
         if: always()
-        with:
-          ref: gh-pages
-          path: gh-pages
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate allure report to Github Pages
         uses: simple-elf/allure-report-action@master
-        if: always()
-        id: allure-report
         with:
           allure_results: allure-results
           gh_pages: gh-pages
@@ -60,25 +49,15 @@ jobs:
           allure_history: allure-history
           keep_reports: 10
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-history
-          publish_branch: gh-pages
-          keep_reports: 10
+      - name: Set report URL
+        run: echo "REPORT_URL=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_ENV
 
-      - name: Generate report URL
+      - name: Prepare Telegram config
         run: |
-          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
-          echo "REPORT_URL=${REPORT_URL}" >> $GITHUB_ENV
+          cp notifications/telegram.template.json notifications/telegram.json
+          sed -i "s|\"reportLink\":.*|\"reportLink\": \"$REPORT_URL\",|" notifications/telegram.json
+          sed -i "s|%%TELEGRAM_BOT_TOKEN%%|${{ secrets.TELEGRAM_BOT_TOKEN }}|" notifications/telegram.json
+          sed -i "s|%%TELEGRAM_CHAT_ID%%|${{ secrets.TELEGRAM_CHAT_ID }}|" notifications/telegram.json
 
-      - name: Create telegram config
-        run: |
-          sed -e "s|\"reportLink\":.*|\"reportLink\": \"${{ env.REPORT_URL }}\",|" \
-          -e "s|%%TELEGRAM_BOT_TOKEN%%|${{ secrets.TELEGRAM_BOT_TOKEN }}|" \
-          -e "s|%%TELEGRAM_CHAT_ID%%|${{ secrets.TELEGRAM_CHAT_ID }}|" \
-          notifications/telegram.template.json > notifications/telegram.json
-
-      - name: Send notification in telegram
-        run: java "-DconfigFile=notifications/telegram.json" -jar notifications/allure-notifications-4.11.0.jar
+      - name: Send Telegram notification
+        run: java -DconfigFile=notifications/telegram.json -jar notifications/allure-notifications-4.11.0.jar
