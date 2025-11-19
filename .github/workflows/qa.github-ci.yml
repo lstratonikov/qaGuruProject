@@ -44,8 +44,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report # Отчёт должен быть в корне!
-          keep_files: false # Очищает ветку перед деплоем
+          publish_dir: ./allure-report
+          keep_files: false
 
       - name: Generate report URL
         run: |
