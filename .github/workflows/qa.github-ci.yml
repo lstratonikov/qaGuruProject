@@ -57,6 +57,25 @@ jobs:
           publish_branch: gh-pages
           keep_reports: 10
 
+      - name: Download allurectl
+        run: |
+          curl -Lo allurectl https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64
+          chmod +x allurectl
+          sudo mv allurectl /usr/local/bin/
+
+      - name: Upload results to Allure TestOps
+        if: always()
+        env:
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_ENDPOINT: "https://allure.autotests.cloud/"
+          ALLURE_PROJECT_ID: "5010"
+        run: |
+          allurectl upload \
+            --project-id $ALLURE_PROJECT_ID \
+            --endpoint $ALLURE_ENDPOINT \
+            --bearer-token $ALLURE_TOKEN \
+            ./allure-results
+
       - name: Set report URL
         run: echo "REPORT_URL=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_ENV
 
