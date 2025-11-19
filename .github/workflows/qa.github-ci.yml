@@ -40,6 +40,12 @@ jobs:
           path: allure-report/
           retention-days: 30
 
+      - name: Get Report URL
+        run: |
+          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/index.html"
+          echo "ALLURE_REPORT_URL=${REPORT_URL}" >> $GITHUB_ENV
+          echo "Allure Report URL: ${REPORT_URL}"
+
       - name: Generate telegram.json
         run: |
           sed -e "s/%%TELEGRAM_BOT_TOKEN%%/${{ secrets.TELEGRAM_BOT_TOKEN }}/g" \
