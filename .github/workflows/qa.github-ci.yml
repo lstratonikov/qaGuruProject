@@ -23,6 +23,11 @@ jobs:
       - name: Install browsers
         run: npm exec playwright install --with-deps
 
+      - name: Create .env
+        run: |
+          echo "BASE_URL_API=${{ vars.BASE_URL_API }}" >> .env
+          echo "BASE_URL_UI=${{ vars.BASE_URL_UI }}" >> .env
+
       - name: Run tests
         run: npx playwright test
 

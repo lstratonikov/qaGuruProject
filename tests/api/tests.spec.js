@@ -1,7 +1,6 @@
 import { test, expect, request } from '@playwright/test';
 import { Api } from '../../src/api/services/api.service';
-import { TodoBuilder } from '../../src/api/helpers/builders/todo.builder';
-import { ChallengerBuilder } from '../../src/api/helpers/builders/challenger.builder';
+import { ChallengerBuilder, TodoBuilder } from '../../src/api/helpers/builders/index';
 
 test.beforeAll(async ({ request }) => {
     let api = new Api(request);
