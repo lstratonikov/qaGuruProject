@@ -40,16 +40,23 @@ jobs:
           path: allure-report/
           retention-days: 30
 
-      - name: Get Report URL
-        run: |
-          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/index.html"
-          echo "ALLURE_REPORT_URL=${REPORT_URL}" >> $GITHUB_ENV
-          echo "Allure Report URL: ${REPORT_URL}"
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report # Отчёт должен быть в корне!
+          keep_files: false # Очищает ветку перед деплоем
 
-      - name: Generate telegram.json
+      - name: Generate report URL
         run: |
-          sed -e "s/%%TELEGRAM_BOT_TOKEN%%/${{ secrets.TELEGRAM_BOT_TOKEN }}/g" \
-          -e "s/%%TELEGRAM_CHAT_ID%%/${{ secrets.TELEGRAM_CHAT_ID }}/g" \
+          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-report/index.html"
+          echo "REPORT_URL=${REPORT_URL}" >> $GITHUB_ENV
+
+      - name: Create telegram config
+        run: |
+          sed -e "s|\"reportLink\":.*|\"reportLink\": \"${{ env.REPORT_URL }}\",|" \
+          -e "s|%%TELEGRAM_BOT_TOKEN%%|${{ secrets.TELEGRAM_BOT_TOKEN }}|" \
+          -e "s|%%TELEGRAM_CHAT_ID%%|${{ secrets.TELEGRAM_CHAT_ID }}|" \
           notifications/telegram.template.json > notifications/telegram.json
 
       - name: Send notification in telegram
