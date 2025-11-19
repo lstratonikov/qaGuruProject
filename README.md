@@ -67,14 +67,6 @@ tests/
 
 ---
 
-## 🔗 TestOps
-
-[Перейти в Allure TestOps](https://allure.autotests.cloud/project/5010)
-
-![TestOps Launch](images_report/testops-launch.png)
-
----
-
 ## 📢 Telegram-уведомления
 
 ![Telegram](images-readme/telegram-notification.png)
@@ -89,4 +81,4 @@ tests/
 
 [Пример запуска](https://allure.autotests.cloud/project/5010)
 
-![TestOps Launch](images_report/testops-launch.png)
+![TestOps Launch](images-readme/testops-launch.png)
