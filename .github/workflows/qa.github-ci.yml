@@ -73,7 +73,7 @@ jobs:
           allurectl upload \
             --project-id $ALLURE_PROJECT_ID \
             --endpoint $ALLURE_ENDPOINT \
-            --bearer-token $ALLURE_TOKEN \
+            --token $ALLURE_TOKEN \
             ./allure-results
 
       - name: Set report URL
