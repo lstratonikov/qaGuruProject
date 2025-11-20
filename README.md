@@ -6,7 +6,8 @@
 
 - **API-тесты** для `https://apichallenges.herokuapp.com`
 - **UI-тесты** для `https://realworld.qa.guru`
-  Тесты написаны на языке **JavaScript** с использованием библиотеки **Playwright**
+
+Тесты написаны на языке **JavaScript** с использованием библиотеки **Playwright**
 
 Настроен **GitHub Actions** и интеграции с ним:
 
