@@ -1,8 +1,8 @@
-import { test, expect} from '@playwright/test';
+import { expect} from '@playwright/test';
+import { test } from '../../src/ui/helpers/fixtures/index';
 import { ArticleBuilder, ProfileBuilder, UserBuilder } from '../../src/ui/helpers/builders/index';
-import { App } from '../../src/ui/pages/app.page';
 
-test('1. Пользователь может зарегистрироваться', async ({page}) => {
+test('1. Пользователь может зарегистрироваться', async ({ app }) => {
 
     //Генерируем юзера для регистрации
     const randomUser = new UserBuilder()
@@ -11,17 +11,14 @@ test('1. Пользователь может зарегистрироватьс�
         .addPassword(10)
         .generate();
 
-    let app = new App(page);
-
     //Процесс регистрации
-    await app.main.open();
     await app.main.register();
     await app.register.signUp(randomUser);
     await expect(app.yourFeed.profileNameField).toContainText(randomUser.username);
 
 });
 
-test('2. Авторизованный пользователь может добавить статью', async({page}) => {
+test('2. Авторизованный пользователь может добавить статью', async({ app }) => {
 
     //Создаем юзера
     const randomUser = new UserBuilder()
@@ -38,12 +35,9 @@ test('2. Авторизованный пользователь может доб
         .addArticleTags()
         .generate();
 
-    let app = new App(page);
-
-    await app.main.open();
     await app.main.register();
     await app.register.signUp(randomUser);
-    await expect.soft(app.yourFeed.profileNameField).toContainText(randomUser.username);
+    await expect(app.yourFeed.profileNameField).toContainText(randomUser.username);
 
     //Переходим в New Article и создаем статью
     await app.main.newArticle();
@@ -56,7 +50,7 @@ test('2. Авторизованный пользователь может доб
     await expect(app.article.paragraph).toContainText(article.text);
 });
 
-test('3. Пользователь может редактировать свою статью', async({page}) => {
+test('3. Пользователь может редактировать свою статью', async({ app }) => {
 
     const randomUser = new UserBuilder()
         .addUsername()
@@ -78,9 +72,6 @@ test('3. Пользователь может редактировать свою
         .addArticleTags()
         .generate();
 
-    let app = new App(page);
-
-    await app.main.open();
     await app.main.register();
     await app.register.signUp(randomUser);
     await expect.soft(app.yourFeed.profileNameField).toContainText(randomUser.username);
@@ -100,7 +91,7 @@ test('3. Пользователь может редактировать свою
     await expect(app.article.paragraph).toContainText(editedArticle.text);
 });
 
-test('4. Пользователь может удалить свою статью', async({page}) => {
+test('4. Пользователь может удалить свою статью', async({ app }) => {
 
     const randomUser = new UserBuilder()
         .addUsername()
@@ -115,12 +106,10 @@ test('4. Пользователь может удалить свою стать�
         .addArticleTags()
         .generate();
 
-    let app = new App(page);
-
     await app.main.open();
     await app.main.register();
     await app.register.signUp(randomUser);
-    await expect.soft(app.yourFeed.profileNameField).toContainText(randomUser.username);
+    await expect(app.yourFeed.profileNameField).toContainText(randomUser.username);
     await app.main.newArticle();
     await app.newArticle.createArticle(article);
 
@@ -135,7 +124,7 @@ test('4. Пользователь может удалить свою стать�
     await expect(app.profile.articles).toContainText(`${randomUser.username} doesn't have articles.`);
 });
 
-test('5. Пользователь может изменить свои личные данные', async({page}) => {
+test('5. Пользователь может изменить свои личные данные', async({ app }) => {
 
     const randomUser = new UserBuilder()
         .addUsername()
@@ -151,12 +140,9 @@ test('5. Пользователь может изменить свои личн�
         .editPassword(10)
         .generate();
 
-    let app = new App(page);
-
-    await app.main.open();
     await app.main.register();
     await app.register.signUp(randomUser);
-    await expect.soft(app.yourFeed.profileNameField).toContainText(randomUser.username);
+    await expect(app.yourFeed.profileNameField).toContainText(randomUser.username);
 
     //Идем в профиль и редактируем информацию
     await app.main.goToSettings();
@@ -169,7 +155,7 @@ test('5. Пользователь может изменить свои личн�
     await expect(app.yourFeed.profileNameField).toContainText(randomProfile.username);
 });
 
-test('6. Пользователь может добавить свою статью в Избранное', async({page}) => {
+test('6. Пользователь может добавить свою статью в Избранное', async({ app }) => {
 
     const randomUser = new UserBuilder()
         .addUsername()
@@ -184,12 +170,9 @@ test('6. Пользователь может добавить свою стат�
         .addArticleTags()
         .generate();
 
-    let app = new App(page);
-
-    await app.main.open();
     await app.main.register();
     await app.register.signUp(randomUser);
-    await expect.soft(app.yourFeed.profileNameField).toContainText(randomUser.username);
+    await expect(app.yourFeed.profileNameField).toContainText(randomUser.username);
     await app.main.newArticle();
     await app.newArticle.createArticle(article);
     await app.main.open();
