@@ -14,7 +14,7 @@ export class ArticleBuilder {
         return this;
     }
     addArticleTags() {
-        this.tags = [faker.lorem.word({length: 4}), faker.lorem.word({length: 5})].join(', ');
+        this.tags = [faker.lorem.word({length: 4}), faker.lorem.word({length: 5})].join(',');
         return this;
     }
     generate() {
