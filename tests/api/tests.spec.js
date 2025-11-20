@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test, request } from '../../src/api/helpers/fixtures/index';
+import { test } from '../../src/api/helpers/fixtures/index';
 import { ChallengerBuilder, TodoBuilder } from '../../src/api/helpers/builders/index';
 import { API_CONST } from '../../src/api/constants/const';
 
